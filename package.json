@@ -1,0 +1,46 @@
+{
+  "name": "calculator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "forever -w index.js",
+    "dev-front": "webpack-dev-server --content-base public/build/ & forever index.js",
+    "dev-no-watch": "webpack & forever server.js",
+    "dev-back": "webpack & forever -w server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongoose": "^4.7.0",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "react-redux": "^4.4.5",
+    "redux": "^3.5.2",
+    "redux-logger": "^2.6.1",
+    "redux-promise-middleware": "^4.0.0",
+    "webpack": "^1.13.3"
+  },
+  "devDependencies": {
+    "babel": "^6.5.2",
+    "babel-core": "^6.14.0",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-preset-decorators-legacy": "^1.0.0",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
+    "eslint": "^3.9.1",
+    "eslint-plugin-import": "^2.0.1",
+    "eslint-plugin-react": "^6.5.0",
+    "get-parameter": "^1.0.8",
+    "jsx-loader": "^0.13.2",
+    "react": "^15.3.1",
+    "should": "^11.1.1",
+    "style-loader": "^0.13.1",
+    "supertest": "^2.0.0",
+    "webpack-dev-server": "^1.16.2"
+  }
+}
