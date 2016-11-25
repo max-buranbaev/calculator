@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "forever -w index.js",
+    "start": "node server.js",
     "dev-front": "webpack-dev-server --content-base public/build/ & forever server.js",
     "dev-no-watch": "webpack & forever server.js",
     "dev-back": "webpack & forever -w server.js",
