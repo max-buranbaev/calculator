@@ -24671,8 +24671,10 @@
 	    switch (action.type) {
 	
 	        case "ADD_SYMBOL":
+	
 	            return Object.assign({}, state, {
-	                screenData: state.screenData + symbol
+	                screenData: symbol == '.' && state.lastInputedNumber == '.' ? state.screenData : state.screenData + symbol,
+	                lastInputedNumber: symbol
 	            });
 	            break;
 	
