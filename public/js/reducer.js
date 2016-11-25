@@ -90,7 +90,12 @@ export default (state = initialState, action) => {
             break;
 
         case "PREPARE_EXPRESSION":
-            newRows[state.currentRow]['expression'] += state.screenData;
+            if(newRows[state.currentRow] != undefined) {
+                newRows[state.currentRow]['expression'] += state.screenData;
+            } else {
+                return state;
+            }
+
             return Object.assign({}, state, {
                 rows: newRows
             });
@@ -101,6 +106,7 @@ export default (state = initialState, action) => {
                 expression: payload.calculation + "=" + payload.result,
                 id: payload._id
             };
+
             if(payload.result === null) {
                 return Object.assign({}, initialState, {
                     alertText: "Dividing by zero is a bad idea!",
@@ -108,6 +114,7 @@ export default (state = initialState, action) => {
 
                 })
             }
+
             return Object.assign({}, state, {
                 alertText: "Success! Result: " + payload.calculation + "=" + payload.result,
                 alertStatus: "success",

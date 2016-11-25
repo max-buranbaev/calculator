@@ -21794,7 +21794,9 @@
 	            var rows = this.props.rows;
 	
 	            _store2.default.dispatch({ type: "PREPARE_EXPRESSION" });
-	            _store2.default.dispatch((0, _calculator.calculate)(rows[rows.length - 1]['expression']));
+	            if (rows[rows.length - 1]) {
+	                _store2.default.dispatch((0, _calculator.calculate)(rows[rows.length - 1]['expression']));
+	            }
 	        }
 	    }, {
 	        key: 'handleClickReset',
@@ -24744,7 +24746,12 @@
 	            break;
 	
 	        case "PREPARE_EXPRESSION":
-	            newRows[state.currentRow]['expression'] += state.screenData;
+	            if (newRows[state.currentRow] != undefined) {
+	                newRows[state.currentRow]['expression'] += state.screenData;
+	            } else {
+	                return state;
+	            }
+	
 	            return Object.assign({}, state, {
 	                rows: newRows
 	            });
@@ -24755,6 +24762,7 @@
 	                expression: payload.calculation + "=" + payload.result,
 	                id: payload._id
 	            };
+	
 	            if (payload.result === null) {
 	                return Object.assign({}, initialState, {
 	                    alertText: "Dividing by zero is a bad idea!",
@@ -24762,6 +24770,7 @@
 	
 	                });
 	            }
+	
 	            return Object.assign({}, state, {
 	                alertText: "Success! Result: " + payload.calculation + "=" + payload.result,
 	                alertStatus: "success",

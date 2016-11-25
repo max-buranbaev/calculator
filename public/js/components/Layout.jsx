@@ -134,7 +134,10 @@ class Layout extends React.Component {
     handleGetResult(ev) {
         const { rows } = this.props;
         store.dispatch({ type: "PREPARE_EXPRESSION" });
-        store.dispatch(calculate(rows[rows.length-1]['expression']));
+        if(rows[rows.length-1]) {
+            store.dispatch(calculate(rows[rows.length-1]['expression']));
+        }
+
     }
 
     handleClickReset(ev) {
