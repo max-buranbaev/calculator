@@ -24713,22 +24713,22 @@
 	            break;
 	
 	        case "RESET":
-	            if (state.screenData && newRows.length) {
-	                var length = newRows[state.currentRow]['expression'].length;
-	                newRows[state.currentRow]['expression'] = newRows[state.currentRow]['expression'].substring(0, length - state.lastInputedNumber.length - 1);
-	                return Object.assign({}, state, {
-	                    rows: newRows,
-	                    screenData: ""
-	                });
-	            } else {
-	                delete newRows[state.currentRow];
-	                return Object.assign({}, state, {
-	                    rows: newRows,
-	                    currentRow: state.currentRow ? state.currentRow - 1 : state.currentRow,
-	                    screenData: ""
-	                });
-	            }
-	
+	            // if(state.screenData && newRows.length) {
+	            //     let length = newRows[state.currentRow]['expression'].length;
+	            //     newRows[state.currentRow]['expression'] = newRows[state.currentRow]['expression'].substring(0, length - state.lastInputedNumber.length - 1);
+	            //     return Object.assign({}, state, {
+	            //         rows: newRows,
+	            //         screenData: ""
+	            //     })
+	            // } else {
+	            //     delete newRows[state.currentRow];
+	            //     return Object.assign({}, state, {
+	            //         rows: newRows,
+	            //         currentRow: state.currentRow ? state.currentRow - 1 : state.currentRow,
+	            //         screenData: ""
+	            //     })
+	            // }
+	            return initialState;
 	            break;
 	
 	        case "CALCULATE_START":
