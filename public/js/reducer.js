@@ -79,7 +79,7 @@ export default (state = initialState, action) => {
             return Object.assign({}, state, {
                 alertText: "Success! Result: " + payload.calculation + "=" + payload.result,
                 alertStatus: "success",
-                screen: payload.result,
+                screen: payload.result.toFixed(5),
                 isLastOperator: true,
                 logger: state.logger.concat(payload),
                 calculation: []
