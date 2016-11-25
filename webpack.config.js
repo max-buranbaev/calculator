@@ -11,8 +11,11 @@ module.exports = {
     },
     module: {
         loaders: [{
-            test: /\.jsx?/,
+            test: /\.js?/,
             loader: 'babel-loader',
+            resolveLoader: {
+                root: path.join(__dirname, 'node_modules')
+            },
             exclude: /node_modules/,
             query: {
                 presets: ['es2015', 'react'],
