@@ -29,8 +29,8 @@ describe('TESTING CALCULATOR API', () => {
             .get('/calculations')
             .expect(200)
             .end((err, res) => {
-                res.body[0]['calculation'].should.equal("20+7*12-56/23");
-                res.body[0]['result'].should.equal(101.56521739130434);
+                res.body[res.body.length-1]['calculation'].should.equal("20+7*12-56/23");
+                res.body[res.body.length-1]['result'].should.equal(101.56521739130434);
                 res.status.should.equal(200);
                 done();
             });
