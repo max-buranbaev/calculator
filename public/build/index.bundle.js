@@ -23983,9 +23983,9 @@
 	            break;
 	
 	        case "RESET":
-	            if (state.screenData) {
+	            if (state.screenData && newRows.length) {
 	                var length = newRows[state.currentRow]['expression'].length;
-	                newRows[state.currentRow]['expression'] = newRows[state.currentRow]['expression'].substring(0, length - state.lastInputedNumber.length);
+	                newRows[state.currentRow]['expression'] = newRows[state.currentRow]['expression'].substring(0, length - state.lastInputedNumber.length - 1);
 	                return Object.assign({}, state, {
 	                    rows: newRows,
 	                    screenData: ""
@@ -23994,7 +23994,8 @@
 	                delete newRows[state.currentRow];
 	                return Object.assign({}, state, {
 	                    rows: newRows,
-	                    currentRow: state.currentRow ? state.currentRow - 1 : state.currentRow
+	                    currentRow: state.currentRow ? state.currentRow - 1 : state.currentRow,
+	                    screenData: ""
 	                });
 	            }
 	

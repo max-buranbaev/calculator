@@ -9,7 +9,7 @@
     "dev-no-watch": "webpack & forever server.js",
     "dev-back": "webpack & forever -w server.js",
     "dev-watch": "webpack-dev-server --content-base public/build/ & forever -w server.js",
-    "test": "mocha test.js"
+    "test": "mocha --no-timeouts test.js"
   },
   "author": "",
   "license": "ISC",
