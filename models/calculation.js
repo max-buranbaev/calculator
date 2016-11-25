@@ -7,6 +7,9 @@ exports = module.exports = (app, mongoose) => {
         date: {
             type: Date,
             default: new Date()
+        },
+        result: {
+            type: Number
         }
     });
 

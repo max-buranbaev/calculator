@@ -1,50 +1,36 @@
 import React from 'react'
 import Button from './Button.jsx'
+import Logger from './Logger.jsx'
+import Alert from './Alert.jsx'
+import store from '../store'
+
 import {connect} from 'react-redux'
+import {calculate} from '../actions/calculator'
 
 class Layout extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            screenData: "",
-            negative: false
-        };
-
         this.handleClickNumber = this.handleClickNumber.bind(this);
         this.handleClickReset = this.handleClickReset.bind(this);
         this.handleClickChangeSign = this.handleClickChangeSign.bind(this);
-    }
-
-    handleClickNumber(ev) {
-        this.setState({
-            screenData: this.state.screenData + ev.target.value
-        });
-    }
-
-    handleClickReset(ev) {
-        this.setState({
-            screenData: "",
-            negative: false
-        });
-    }
-
-    handleClickChangeSign(ev) {
-        this.setState({
-            negative: !this.state.negative
-        })
+        this.handleClickOperator = this.handleClickOperator.bind(this);
+        this.handleGetResult = this.handleGetResult.bind(this);
     }
 
     render() {
         return (
             <div className="container main-container">
                 <div className="row">
+                    <Alert status={this.props.alertStatus} text={this.props.alertText}/>
+                </div>
+                <div className="row">
                     <div className="jumbotron calculator">
 
                         <div className="row">
                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div className="calculator__screen">
-                                    {this.state.negative ? "-" + this.state.screenData : this.state.screenData}
+                                    { this.props.screenData ? this.props.screenData : "0" }
                                 </div>
                             </div>
                         </div>
@@ -58,7 +44,7 @@ class Layout extends React.Component {
                             </div>
                             <div
                                 className="col-lg-3 col-md-3 col-sm-3 col-xs-3 col-md-offset-3 col-sm-offset-3 col-xs-offset-3">
-                                <Button>÷</Button>
+                                <Button onClick={this.handleClickOperator} value="/">÷</Button>
                             </div>
                         </div>
 
@@ -73,7 +59,7 @@ class Layout extends React.Component {
                                 <Button onClick={this.handleClickNumber} value="9">9</Button>
                             </div>
                             <div className="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                                <Button>×</Button>
+                                <Button onClick={this.handleClickOperator} value="*">×</Button>
                             </div>
                         </div>
 
@@ -88,7 +74,7 @@ class Layout extends React.Component {
                                 <Button onClick={this.handleClickNumber} value="6">6</Button>
                             </div>
                             <div className="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                                <Button>-</Button>
+                                <Button onClick={this.handleClickOperator} value="-">-</Button>
                             </div>
                         </div>
 
@@ -103,7 +89,7 @@ class Layout extends React.Component {
                                 <Button onClick={this.handleClickNumber} value="3">3</Button>
                             </div>
                             <div className="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                                <Button>+</Button>
+                                <Button onClick={this.handleClickOperator} value="+">+</Button>
                             </div>
                         </div>
 
@@ -115,18 +101,57 @@ class Layout extends React.Component {
                                 <Button onClick={this.handleClickNumber} value=".">.</Button>
                             </div>
                             <div className="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                                <Button>=</Button>
+                                <Button onClick={this.handleGetResult}>=</Button>
                             </div>
                         </div>
+
+                    </div>
+                </div>
+
+                <div className="row">
+                    <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                        <Logger rows={this.props.rows}/>
+
                     </div>
                 </div>
             </div>
         )
     }
+
+    handleClickNumber(ev) {
+        store.dispatch({ type: "ADD_SYMBOL", symbol: ev.target.value })
+    }
+
+    handleClickChangeSign(ev) {
+        store.dispatch({ type: "CHANGE_SIGN" })
+    }
+
+    handleClickOperator(ev) {
+        store.dispatch({ type: "ADD_OPERATOR", operator: ev.target.value });
+    }
+
+    handleGetResult(ev) {
+        const { rows } = this.props;
+        store.dispatch({ type: "PREPARE_EXPRESSION" });
+        store.dispatch(calculate(rows[rows.length-1]['expression']));
+    }
+
+    handleClickReset(ev) {
+        store.dispatch({ type: "RESET" });
+    }
+
 }
 
 function getParams(state) {
-    return {}
+    return {
+        rows: state.rows,
+        alertStatus: state.alertStatus,
+        alertText: state.alertText,
+        result: state.result,
+        screenData: state.screenData,
+        lastOperator: state.lastOperator
+    }
 }
 
-export default Layout
+export default connect(getParams)(Layout)

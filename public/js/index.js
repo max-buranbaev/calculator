@@ -1,7 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import store from './store.js'
 import Layout from './components/Layout.jsx'
+
+import store from './store.js'
+
 
 import { Provider } from 'react-redux'
 
