@@ -16,6 +16,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // setup mongoose
+mongoose.Promise = global.Promise;
 app.db = mongoose.createConnection(config.mongodb.uri);
 app.db.on('error', console.error.bind(console, 'mongoose connection error: '));
 app.db.once('open', function () {
@@ -36,6 +37,4 @@ require('./routes')(app);
 // adding model
 require('./models/calculation')(app, mongoose);
 
-
-//listen up
-app.server.listen(app.config.port, () => console.log('Server is running on port ' + config.port));
+module.exports = app;
