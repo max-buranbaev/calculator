@@ -110,9 +110,7 @@ class Layout extends React.Component {
 
                 <div className="row">
                     <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-
-
+                        <Logger rows={this.props.logger} />
                     </div>
                 </div>
             </div>
@@ -148,6 +146,7 @@ function getParams(state) {
         alertText: state.alertText,
         result: state.result,
         screen: state.screen,
+        logger: state.logger
     }
 }
 

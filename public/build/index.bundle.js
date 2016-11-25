@@ -21765,7 +21765,11 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'row' },
-	                    _react2.default.createElement('div', { className: 'col-xs-12 col-sm-12 col-md-12 col-lg-12' })
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'col-xs-12 col-sm-12 col-md-12 col-lg-12' },
+	                        _react2.default.createElement(_Logger2.default, { rows: this.props.logger })
+	                    )
 	                )
 	            );
 	        }
@@ -21805,7 +21809,8 @@
 	        alertStatus: state.alertStatus,
 	        alertText: state.alertText,
 	        result: state.result,
-	        screen: state.screen
+	        screen: state.screen,
+	        logger: state.logger
 	    };
 	}
 	
@@ -23623,9 +23628,9 @@
 	    var loggerRows = rows.map(function (row) {
 	        return _react2.default.createElement(
 	            "li",
-	            { className: "list-unstyled", key: row.id },
+	            { className: "list-unstyled", key: row._id },
 	            " ",
-	            row.expression,
+	            row.calculation + " = " + row.result,
 	            " "
 	        );
 	    });
@@ -24646,7 +24651,8 @@
 	    alertText: "Calculator is ready!",
 	    alertStatus: "ready",
 	    screen: "",
-	    isLastOperator: false
+	    isLastOperator: false,
+	    logger: []
 	};
 	
 	exports.default = function () {
@@ -24724,6 +24730,7 @@
 	                alertStatus: "success",
 	                screen: payload.result,
 	                isLastOperator: true,
+	                logger: state.logger.concat(payload),
 	                calculation: []
 	            });
 	

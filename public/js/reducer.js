@@ -6,7 +6,8 @@ const initialState = {
     alertText: "Calculator is ready!",
     alertStatus: "ready",
     screen: "",
-    isLastOperator: false
+    isLastOperator: false,
+    logger: []
 };
 
 export default (state = initialState, action) => {
@@ -80,6 +81,7 @@ export default (state = initialState, action) => {
                 alertStatus: "success",
                 screen: payload.result,
                 isLastOperator: true,
+                logger: state.logger.concat(payload),
                 calculation: []
             });
 
