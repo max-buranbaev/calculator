@@ -30,7 +30,7 @@ class Layout extends React.Component {
                         <div className="row">
                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div className="calculator__screen">
-                                    { this.props.screenData ? this.props.screenData : "0" }
+                                    { this.props.screen ? this.props.screen : "0" }
                                 </div>
                             </div>
                         </div>
@@ -111,7 +111,7 @@ class Layout extends React.Component {
                 <div className="row">
                     <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-                        <Logger rows={this.props.rows}/>
+
 
                     </div>
                 </div>
@@ -132,12 +132,7 @@ class Layout extends React.Component {
     }
 
     handleGetResult(ev) {
-        const { rows } = this.props;
-        store.dispatch({ type: "PREPARE_EXPRESSION" });
-        if(rows[rows.length-1]) {
-            store.dispatch(calculate(rows[rows.length-1]['expression']));
-        }
-
+        store.dispatch(calculate(this.props.calculation.concat([this.props.screen]).join('')));
     }
 
     handleClickReset(ev) {
@@ -148,12 +143,11 @@ class Layout extends React.Component {
 
 function getParams(state) {
     return {
-        rows: state.rows,
+        calculation: state.calculation,
         alertStatus: state.alertStatus,
         alertText: state.alertText,
         result: state.result,
-        screenData: state.screenData,
-        lastOperator: state.lastOperator
+        screen: state.screen,
     }
 }
 

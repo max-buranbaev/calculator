@@ -1,79 +1,55 @@
 import _ from 'lodash'
 
 const initialState = {
-    currentRow: 0,
     result: null,
-    rows: [],
+    calculation: [],
     alertText: "Calculator is ready!",
     alertStatus: "ready",
-    screenData: "",
-    lastInputedNumber: ""
+    screen: "",
+    isLastOperator: false
 };
 
 export default (state = initialState, action) => {
 
     const { type, symbol, payload, sign, operator } = action;
-    let newRows = [].concat(state.rows);
+
     switch ( action.type ) {
 
         case "ADD_SYMBOL":
 
-            return Object.assign({}, state, {
-                screenData: symbol == '.' && state.lastInputedNumber == '.' ?  state.screenData : state.screenData + symbol,
-                lastInputedNumber: symbol
-            });
+            if(symbol == '.' && state.lastInputedNumber == '.') {
+                return state;
+            } else {
+                if(state.isLastOperator) {
+                    return Object.assign({}, state, { screen: symbol, isLastOperator: false });
+                } else {
+                    return Object.assign({}, state, { screen: state.screen + symbol });
+                }
+            }
             break;
 
+
         case "CHANGE_SIGN":
-            let newSymbol = "";
-            if(state.screenData[0] == "(") {
-                newSymbol = state.screenData.substring(1, state.screenData.length-2);
-            } else {
-                newSymbol = "(-" + state.screenData + ")";
+            if(state.screen) {
+                var number = parseFloat(state.screen) * (-1);
             }
-            return Object.assign({}, state, { screenData: newSymbol });
+            return Object.assign({}, state, { screen: number.toString() });
             break;
 
         case "ADD_OPERATOR":
-            if(!state.screenData) {
-                return state;
-            } else {
-                if(newRows[state.currentRow]) {
-                    newRows[state.currentRow]['expression'] += state.screenData + operator
-                } else {
-                    newRows[state.currentRow] = {
-                        expression: state.screenData + operator,
-                        id: _.uniqueId()
-                    };
-                }
-            }
+            if(!state.screen) return state;
 
             return Object.assign({}, state, {
-                rows: newRows,
-                screenData: "",
-                lastInputedNumber: state.screenData
+                calculation: state.calculation.concat([state.screen, operator]),
+                isLastOperator: true
             });
 
             break;
 
         case "RESET":
-            // if(state.screenData && newRows.length) {
-            //     let length = newRows[state.currentRow]['expression'].length;
-            //     newRows[state.currentRow]['expression'] = newRows[state.currentRow]['expression'].substring(0, length - state.lastInputedNumber.length - 1);
-            //     return Object.assign({}, state, {
-            //         rows: newRows,
-            //         screenData: ""
-            //     })
-            // } else {
-            //     delete newRows[state.currentRow];
-            //     return Object.assign({}, state, {
-            //         rows: newRows,
-            //         currentRow: state.currentRow ? state.currentRow - 1 : state.currentRow,
-            //         screenData: ""
-            //     })
-            // }
             return initialState;
             break;
+
 
         case "CALCULATE_START":
             return Object.assign({}, state, {
@@ -89,23 +65,7 @@ export default (state = initialState, action) => {
             });
             break;
 
-        case "PREPARE_EXPRESSION":
-            if(newRows[state.currentRow] != undefined) {
-                newRows[state.currentRow]['expression'] += state.screenData;
-            } else {
-                return state;
-            }
-
-            return Object.assign({}, state, {
-                rows: newRows
-            });
-            break;
-
         case "CALCULATE_SUCCESS":
-            newRows[state.currentRow] = {
-                expression: payload.calculation + "=" + payload.result,
-                id: payload._id
-            };
 
             if(payload.result === null) {
                 return Object.assign({}, initialState, {
@@ -118,10 +78,9 @@ export default (state = initialState, action) => {
             return Object.assign({}, state, {
                 alertText: "Success! Result: " + payload.calculation + "=" + payload.result,
                 alertStatus: "success",
-                currentRow: state.currentRow + 1,
-                result: payload.result,
-                rows: newRows,
-                screenData: ""
+                screen: payload.result,
+                isLastOperator: true,
+                calculation: []
             });
 
             break;

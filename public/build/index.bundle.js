@@ -21765,11 +21765,7 @@
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'row' },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'col-xs-12 col-sm-12 col-md-12 col-lg-12' },
-	                        _react2.default.createElement(_Logger2.default, { rows: this.props.rows })
-	                    )
+	                    _react2.default.createElement('div', { className: 'col-xs-12 col-sm-12 col-md-12 col-lg-12' })
 	                )
 	            );
 	        }
@@ -21791,12 +21787,7 @@
 	    }, {
 	        key: 'handleGetResult',
 	        value: function handleGetResult(ev) {
-	            var rows = this.props.rows;
-	
-	            _store2.default.dispatch({ type: "PREPARE_EXPRESSION" });
-	            if (rows[rows.length - 1]) {
-	                _store2.default.dispatch((0, _calculator.calculate)(rows[rows.length - 1]['expression']));
-	            }
+	            _store2.default.dispatch((0, _calculator.calculate)(this.props.calculation.join('')));
 	        }
 	    }, {
 	        key: 'handleClickReset',
@@ -21810,12 +21801,11 @@
 	
 	function getParams(state) {
 	    return {
-	        rows: state.rows,
+	        calculation: state.calculation,
 	        alertStatus: state.alertStatus,
 	        alertText: state.alertText,
 	        result: state.result,
-	        screenData: state.screenData,
-	        lastOperator: state.lastOperator
+	        screenData: state.screenData
 	    };
 	}
 	
@@ -24651,9 +24641,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var initialState = {
-	    currentRow: 0,
 	    result: null,
-	    rows: [],
+	    calculation: [],
 	    alertText: "Calculator is ready!",
 	    alertStatus: "ready",
 	    screenData: "",
@@ -24669,11 +24658,10 @@
 	        sign = action.sign,
 	        operator = action.operator;
 	
-	    var newRows = [].concat(state.rows);
+	
 	    switch (action.type) {
 	
 	        case "ADD_SYMBOL":
-	
 	            return Object.assign({}, state, {
 	                screenData: symbol == '.' && state.lastInputedNumber == '.' ? state.screenData : state.screenData + symbol,
 	                lastInputedNumber: symbol
@@ -24694,40 +24682,11 @@
 	            if (!state.screenData) {
 	                return state;
 	            } else {
-	                if (newRows[state.currentRow]) {
-	                    newRows[state.currentRow]['expression'] += state.screenData + operator;
-	                } else {
-	                    newRows[state.currentRow] = {
-	                        expression: state.screenData + operator,
-	                        id: _lodash2.default.uniqueId()
-	                    };
-	                }
+	                Object.assign({}, state, { calculation: state.calculation.concat([state.screenData, operator]) });
 	            }
-	
-	            return Object.assign({}, state, {
-	                rows: newRows,
-	                screenData: "",
-	                lastInputedNumber: state.screenData
-	            });
-	
 	            break;
 	
 	        case "RESET":
-	            // if(state.screenData && newRows.length) {
-	            //     let length = newRows[state.currentRow]['expression'].length;
-	            //     newRows[state.currentRow]['expression'] = newRows[state.currentRow]['expression'].substring(0, length - state.lastInputedNumber.length - 1);
-	            //     return Object.assign({}, state, {
-	            //         rows: newRows,
-	            //         screenData: ""
-	            //     })
-	            // } else {
-	            //     delete newRows[state.currentRow];
-	            //     return Object.assign({}, state, {
-	            //         rows: newRows,
-	            //         currentRow: state.currentRow ? state.currentRow - 1 : state.currentRow,
-	            //         screenData: ""
-	            //     })
-	            // }
 	            return initialState;
 	            break;
 	
@@ -24742,18 +24701,6 @@
 	            return Object.assign({}, state, {
 	                alertText: "Something goes wrong!",
 	                alertStatus: "fail"
-	            });
-	            break;
-	
-	        case "PREPARE_EXPRESSION":
-	            if (newRows[state.currentRow] != undefined) {
-	                newRows[state.currentRow]['expression'] += state.screenData;
-	            } else {
-	                return state;
-	            }
-	
-	            return Object.assign({}, state, {
-	                rows: newRows
 	            });
 	            break;
 	
