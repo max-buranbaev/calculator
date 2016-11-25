@@ -30,7 +30,7 @@ class Layout extends React.Component {
                         <div className="row">
                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div className="calculator__screen">
-                                    { this.props.screen ? this.props.screen : "0" }
+                                    { this.props.screen ? this.props.screen.substr(0,10) : "0" }
                                 </div>
                             </div>
                         </div>
@@ -145,7 +145,7 @@ function getParams(state) {
         alertStatus: state.alertStatus,
         alertText: state.alertText,
         result: state.result,
-        screen: state.screen,
+        screen: state.screen.toString(),
         logger: state.logger
     }
 }

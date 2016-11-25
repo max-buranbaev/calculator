@@ -21573,7 +21573,7 @@
 	                                _react2.default.createElement(
 	                                    'div',
 	                                    { className: 'calculator__screen' },
-	                                    this.props.screen ? this.props.screen : "0"
+	                                    this.props.screen ? this.props.screen.substr(0, 10) : "0"
 	                                )
 	                            )
 	                        ),
@@ -21809,7 +21809,7 @@
 	        alertStatus: state.alertStatus,
 	        alertText: state.alertText,
 	        result: state.result,
-	        screen: state.screen,
+	        screen: state.screen.toString(),
 	        logger: state.logger
 	    };
 	}
@@ -24728,7 +24728,7 @@
 	            return Object.assign({}, state, {
 	                alertText: "Success! Result: " + payload.calculation + "=" + payload.result,
 	                alertStatus: "success",
-	                screen: payload.result.toFixed(5),
+	                screen: payload.result,
 	                isLastOperator: true,
 	                logger: state.logger.concat(payload),
 	                calculation: []
