@@ -21573,7 +21573,7 @@
 	                                _react2.default.createElement(
 	                                    'div',
 	                                    { className: 'calculator__screen' },
-	                                    this.props.screenData ? this.props.screenData : "0"
+	                                    this.props.screen ? this.props.screen : "0"
 	                                )
 	                            )
 	                        ),
@@ -21787,7 +21787,7 @@
 	    }, {
 	        key: 'handleGetResult',
 	        value: function handleGetResult(ev) {
-	            _store2.default.dispatch((0, _calculator.calculate)(this.props.calculation.join('')));
+	            _store2.default.dispatch((0, _calculator.calculate)(this.props.calculation.concat([this.props.screen]).join('')));
 	        }
 	    }, {
 	        key: 'handleClickReset',
@@ -21805,7 +21805,7 @@
 	        alertStatus: state.alertStatus,
 	        alertText: state.alertText,
 	        result: state.result,
-	        screenData: state.screenData
+	        screen: state.screen
 	    };
 	}
 	
@@ -24645,8 +24645,8 @@
 	    calculation: [],
 	    alertText: "Calculator is ready!",
 	    alertStatus: "ready",
-	    screenData: "",
-	    lastInputedNumber: ""
+	    screen: "",
+	    isLastOperator: false
 	};
 	
 	exports.default = function () {
@@ -24662,28 +24662,33 @@
 	    switch (action.type) {
 	
 	        case "ADD_SYMBOL":
-	            return Object.assign({}, state, {
-	                screenData: symbol == '.' && state.lastInputedNumber == '.' ? state.screenData : state.screenData + symbol,
-	                lastInputedNumber: symbol
-	            });
+	
+	            if (symbol == '.' && state.lastInputedNumber == '.') {
+	                return state;
+	            } else {
+	                if (state.isLastOperator) {
+	                    return Object.assign({}, state, { screen: symbol, isLastOperator: false });
+	                } else {
+	                    return Object.assign({}, state, { screen: state.screen + symbol });
+	                }
+	            }
 	            break;
 	
 	        case "CHANGE_SIGN":
-	            var newSymbol = "";
-	            if (state.screenData[0] == "(") {
-	                newSymbol = state.screenData.substring(1, state.screenData.length - 2);
-	            } else {
-	                newSymbol = "(-" + state.screenData + ")";
+	            if (state.screen) {
+	                var number = parseFloat(state.screen) * -1;
 	            }
-	            return Object.assign({}, state, { screenData: newSymbol });
+	            return Object.assign({}, state, { screen: number.toString() });
 	            break;
 	
 	        case "ADD_OPERATOR":
-	            if (!state.screenData) {
-	                return state;
-	            } else {
-	                Object.assign({}, state, { calculation: state.calculation.concat([state.screenData, operator]) });
-	            }
+	            if (!state.screen) return state;
+	
+	            return Object.assign({}, state, {
+	                calculation: state.calculation.concat([state.screen, operator]),
+	                isLastOperator: true
+	            });
+	
 	            break;
 	
 	        case "RESET":
@@ -24705,10 +24710,6 @@
 	            break;
 	
 	        case "CALCULATE_SUCCESS":
-	            newRows[state.currentRow] = {
-	                expression: payload.calculation + "=" + payload.result,
-	                id: payload._id
-	            };
 	
 	            if (payload.result === null) {
 	                return Object.assign({}, initialState, {
@@ -24721,10 +24722,9 @@
 	            return Object.assign({}, state, {
 	                alertText: "Success! Result: " + payload.calculation + "=" + payload.result,
 	                alertStatus: "success",
-	                currentRow: state.currentRow + 1,
-	                result: payload.result,
-	                rows: newRows,
-	                screenData: ""
+	                screen: payload.result,
+	                isLastOperator: true,
+	                calculation: []
 	            });
 	
 	            break;
