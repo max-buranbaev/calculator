@@ -1,0 +1,31 @@
+.main-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calculator__row-buttons {
+    margin-bottom: 20px;
+}
+
+.calculator__screen {
+    height: 45px;
+    padding: 5px 10px 5px 10px;
+    line-height: 35px;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: right;
+    width: 100%;
+    background-color: #FFFFFF;
+    margin-bottom: 40px;
+    border-radius: 5px;
+}
+
+.calculator__btn:active {
+    outline: 0;
+}
+
+.calculator {
+
+}
