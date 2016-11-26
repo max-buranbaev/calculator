@@ -24673,7 +24673,12 @@
 	                return state;
 	            } else {
 	                if (state.isLastOperator) {
-	                    return Object.assign({}, state, { screen: symbol, isLastOperator: false });
+	                    return Object.assign({}, state, {
+	                        screen: symbol,
+	                        isLastOperator: false,
+	                        alertText: "Calculator is ready!",
+	                        alertStatus: "ready"
+	                    });
 	                } else {
 	                    return Object.assign({}, state, { screen: state.screen + symbol });
 	                }
@@ -24681,6 +24686,8 @@
 	            break;
 	
 	        case "CHANGE_SIGN":
+	            if (state.alertStatus = "success") return state;
+	
 	            if (state.screen) {
 	                var number = parseFloat(state.screen) * -1;
 	            }
@@ -24698,7 +24705,14 @@
 	            break;
 	
 	        case "RESET":
-	            return initialState;
+	            return Object.assign({}, state, {
+	                result: null,
+	                calculation: [],
+	                alertText: "Calculator is ready!",
+	                alertStatus: "ready",
+	                screen: "",
+	                isLastOperator: false
+	            });
 	            break;
 	
 	        case "CALCULATE_START":
